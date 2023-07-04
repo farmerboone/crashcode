@@ -1,0 +1,56 @@
+/*******************************************************************************
+AUTHOR SECTION
+
+   ENGR 200.01                                               DATE: 07/02/2023
+
+   PROGRAM: Assignment 2                              Author: Elizabeth Boone
+********************************************************************************
+   PROGRAM DESCRIPTION 
+   Write a C program that asks the user to enter the pressure of the CO2 in atmospheres, the
+volume in liters, and the number of moles. Compute the corresponding temperature using the
+van der Waals equation and print this temperature in degrees Kelvin.
+
+	NOTES: could use #define for the a,b, R values, see example 1 in lecture 6/29 (75), add unsigned for fun at input
+
+   DESCRIPTION OF VARIABLES
+   NAME         |  TYPE    | DESCRIPTION                                
+   -----------------------------------------------------------------------------
+
+*******************************************************************************/
+
+/* Preprocessor directives */
+#include <stdio.h>
+#include <math.h>
+#define A 3.607
+#define B 0.04286
+#define R 0.082057
+
+/* Main function */
+int main(void)
+{
+   /* Declare variables */
+double p_atm, v_l, n_m, t; 
+   
+   /* Print headings */
+   printf("********************************************");
+   printf("\n\t CO2 SAMPLES TEMPERATURE ");
+   
+   /* Input values */
+    printf("\n\nEnter pressue in atm: ");
+    scanf("%lf", &p_atm);
+    printf("\nEnter volume in L: ");
+    scanf("%lf", &v_l);
+    printf("\nEnter number of moles: ");
+    scanf("%lf", &n_m);
+   /* Compute */
+   t = (p_atm + A*(n_m*n_m / v_l*v_l)*(v_l - n_m*B)/(n_m*R));
+
+   /* Print output values */
+   printf("\n\nRESULTS");
+   printf("\nTemperature = %5.1f degrees Kelvin", t);
+   printf("\n********************************************\n\n\n");
+
+   /* Exit the program */
+   return 0;
+}
+/******************************************************************************/
