@@ -1,0 +1,60 @@
+/*******************************************************************************
+AUTHOR SECTION
+
+   ENGR 200.01                                       DATE: 07/07/2023
+
+   PROGRAM: #  Assignment 3                             Author: Elizabeth Boone
+********************************************************************************
+   PROGRAM DESCRIPTION 
+
+   DESCRIPTION OF VARIABLES
+   NAME         |  TYPE    | DESCRIPTION   
+   w_ft			double		watching height in feet
+   wd_ft		double      watching distance in feet
+   t_d			double		tilt angle in degrees
+   t_r			double		tilt converted to radians
+   tv_h			double		tv height (output)                     
+   -----------------------------------------------------------------------------
+
+*******************************************************************************/
+
+/* Preprocessor directives */
+#include <stdio.h>
+#include <math.h>
+
+/* Main function */
+int main(void)
+{
+   /* Declare variables */	
+   double w_ft, wd_ft, t_d, t_r, tv_h, x;
+   
+   /* Print headings */
+   printf("********************************************");
+   printf("\n\n\tOPTIMAL TV HEIGHT ");
+   
+   /* Input values */
+    printf("\n\nEnter the watching height in feet: ");
+    scanf("%lf", &w_ft);
+    printf("\nEnter the watching distance in feet: ");
+    scanf("%lf", &wd_ft);
+    printf("\nEnter the tilt angle in degrees: ");
+	scanf("%lf", &t_d);
+   /* Compute */
+	t_r = t_d * (M_PI / 180.0);
+	tv_h = w_ft+(wd_ft * tan(t_r)); 
+   	x = tan(t_r);
+
+   /* Print output values */
+   printf("\n\nRESULTS");
+   printf("\nTilt angle = %04.1lf degrees", t_d);
+   printf("\nTilt angle = %04.1lf radians", t_r);
+   printf("\nWatch height = %04.2lf ft", w_ft);
+   printf("\nWatch distance = %04.1lf", wd_ft);
+   printf("\n\n Optimal TV height = %05.2lf ft", tv_h);
+   printf("\nCheck tan function = %lf x", x);
+   printf("\n********************************************\n\n\n");
+
+   /* Exit the program */
+   return 0;
+}
+/******************************************************************************/
