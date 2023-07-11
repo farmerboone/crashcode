@@ -58,10 +58,10 @@ int main(void)
 		(0.00085282*t_f*pow(r,2))-
 		(0.00000199*pow(t_f,2)*pow(r,2));
 		
-		t_c=((t_f-32)*5/9);
+		t_c=((t_f-32.0)*5.0/9.0);
 		
-		f=(6.112*10*(7.5*t_c/(237.7+t_c)))*(r/100);
-		humidex=t_c+((5/9)*(f-10))
+		f=(6.112*10.0*(7.5*t_c/(237.7+t_c)))*(r/100.0);
+		humidex=(t_c+((5.0/9.0)*(f-10.0)));
 	}
 
    /* Print output values */
@@ -70,8 +70,27 @@ int main(void)
    printf("\nTemperature (degress C): %05.1lf",t_c);
    printf("\nRelative humidity: %04.1lf", r);
    printf("\n\nHeat Index: %05.1lf", heat_index);
-   printf("\nHumidex: %lf", humidex);   
-   printf("\nf %lf", f);
+   printf("\nHumidex: %04.1lf", humidex);   
+   if(humidex>=27 && humidex<=32)
+   {
+   	printf("\n\nWARNING:Fatigue possible with prolonged exposure");
+   }
+      if(humidex>32 && humidex<=40)
+   {
+   	printf("\n\nWARNING:Sun stroke, heat cramps, and heat exhaustion possible");
+   }
+   if(humidex>40 && humidex<=54)
+   {
+   	printf("\n\nWARNING:Sun stroke, heat cramps, and exhaustion likely, and heat stroke possible");
+   }
+      if(humidex>54)
+   {
+   	printf("\n\nWARNING:Heat stroke likely");
+   }
+   if(humidex<27)
+   {
+   		printf("\n\nNo health concerns expected");
+   }
    printf("\n********************************************\n\n\n");
 
    /* Exit the program */
