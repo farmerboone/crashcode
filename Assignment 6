@@ -1,0 +1,103 @@
+/*******************************************************************************
+AUTHOR SECTION
+
+   ENGR 200.01                                               DATE: 07/18/2023
+
+   PROGRAM: Assignment 6                             Author: Elizabeth Boone
+********************************************************************************
+   PROGRAM DESCRIPTION Write a C program to read the information for each hole from the explore.txt data file (one point at a time). Using
+the hole depth, compute the ideal powder-to-hole depth ratio, the ideal number of sticks, the ideal powder charge,
+the actual powder charge, and the actual number of sticks. Your program will produce a table as the report. Print
+the table to the computer screen and to an output file called blasting.txt.
+Once the program is working, modify the program to account for any hole depth that is less than 30 feet. Instead
+of printing the normal column items, for any hole that is less than 30 feet in depth, print the well site number, the
+well depth, and then print a message that the hole is too shallow
+
+   DESCRIPTION OF VARIABLES
+   NAME         |  TYPE    | DESCRIPTION                                
+   well				int		Site ID, given in explore file
+   ndata			int		control number
+   depth_ft			double	well depth in feet
+   ipowder_lb		double	ideal charge powder in pounds
+   apowder_lb		double	actual charge powder in pounds
+   i_stick			double	ideal sticks of dynamite (not printed)
+   a_stick			double	actual sticks of dynamite
+
+*******************************************************************************/
+
+/* Preprocessor directives */
+#include <stdio.h>
+#include <math.h>
+#define inputfile ("C:\\Users\\ElizabethBoone\\Myer Hill Consulting\\Communication site - Documents\\Elizabeth\\UND\\SUM'23\\ENGR 200 - Comp\\Assignment 6\\explore.txt")
+#define outputfile ("C:\\Users\\ElizabethBoone\\Myer Hill Consulting\\Communication site - Documents\\Elizabeth\\UND\\SUM'23\\ENGR 200 - Comp\\Assignment 6\\blasting.txt")
+/* Main function */
+int main(void)
+{
+   /* Declare variables */
+	int well, ndata;
+	double depth_ft, ipowder_lb, apowder_lb, i_stick, a_stick; 
+	FILE *explore = NULL, *blasting = NULL;
+	
+	/*Open input and output files*/
+   explore  = fopen(inputfile,"r");
+   blasting = fopen(outputfile,"w");
+   
+   /* Print headings */
+   printf("********************************************");
+   printf("\n		DAILY DRILLING REPORT ");
+   printf("\n\nSite ID        Depth        Ideal Powder    Actual Powder      Sticks");
+   printf("\n                (ft)        Charge (lbs)     Charge(lbs)");
+   
+   /*Print in output data file*/
+   fprintf(blasting, "********************************************");
+   fprintf(blasting, "\n		DAILY DRILLING REPORT ");
+   fprintf(blasting, "\n\nSite ID        Depth        Ideal Powder    Actual Powder      Sticks");
+   fprintf(blasting, "\n                (ft)        Charge (lbs)     Charge(lbs)");   
+
+
+/*Verify Input file exists or not and then read the control number if it exists*/
+   if(explore == NULL)
+   {
+   	printf("\n\n\nERROR OPENING INPUT FILE");
+   	printf("\n    PROGRAM TERMINATED");
+ 	return 1;
+   }
+   else
+   {
+   		/*Read the control number*/
+   		fscanf(explore,"%i", &ndata);
+   		
+   		/*Read the input data and compute and print results*/
+   		
+   		for (double i=1; i<=ndata; i++)
+   		{
+   			fscanf(explore,"%i, %lf", &well, &depth_ft);
+   			i_stick = (depth_ft/3.0)/2.0;
+   			ipowder_lb = i_stick*6.0;
+   			a_stick = floor(i_stick);
+   			apowder_lb = a_stick*6.0;
+   			if (depth_ft <30)
+   			{
+   				printf("\n                                **Hole is too shallow for blasting.""""");
+   				fprintf(blasting,"\n                      **Hole is too shallow for blasting.""""");
+   				
+			   }
+			   else{
+			   	printf("\n%5i		%03.0lf		%05.2lf		%03.0lf		%03.0lf", well, depth_ft, ipowder_lb, apowder_lb, a_stick);
+				fprintf(blasting, "\n%5i		%03.0lf		%05.2lf		%03.0lf		%03.0lf", well, depth_ft, ipowder_lb, apowder_lb, a_stick);
+			   }
+
+		   }
+	}
+   
+   printf("\n********************************************\n\n\n");
+   fprintf(blasting, "\n********************************************\n\n\n");
+   
+   /*Close the input and output files*/
+   fclose(explore);
+   fclose(blasting);
+   
+   /* Exit the program */
+   return 0;
+}
+/******************************************************************************/
