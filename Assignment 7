@@ -1,0 +1,118 @@
+/*******************************************************************************
+AUTHOR SECTION
+
+   ENGR 200.01                                               DATE: 07/22/2023
+
+   PROGRAM: #7                               Author: Elizabeth Boone
+********************************************************************************
+   PROGRAM DESCRIPTION 
+   Write a C program that will read the required values from the input file. Using the voltage and resistance,
+compute the current in each circuit and the power dissipated by the resistor in each circuit. Write a user-defined
+function to compute the current and a user-defined function to compute the power. Your program will produce a
+report in tabular format. Print the table to the computer screen and to an output file called levels.
+Once the program is working, modify the program to account for any current that is greater than 0.1 amp. Instead
+of printing the normal column items, for any circuit with current greater than 0.1 amp, print the voltage, the
+resistance, and then print a message that the current may be fatal. The output format is shown on page 2. 
+
+*******************************************************************************/
+
+/* Preprocessor directives */
+#include <stdio.h>
+#include <math.h>
+#define input ("C:\\Engr 200\\circuits.txt")
+#define output ("C:\\Engr 200\\levels.txt")
+
+
+/*User function prototypes*/
+double current (double,double);
+double power (double, double);
+
+
+/* Main function */
+int main(void)
+{
+   /* Declare variables */
+	double i_amps, v_volt, r_ohm, p_watt;
+	int count, ndata;
+	FILE*circuits = NULL,*levels = NULL;
+	
+   /*Open input and output files */
+   circuits  = fopen(input,"r");
+   levels = fopen(output,"w");
+      
+   
+   /* Print headings */
+   printf("********************************************");
+   printf("\n	CIRCUIT AMPERAGE AND POWER");
+   printf("\n\nVoltage      Resistance        Current          Power");
+   printf("\n(V)            (ohms)           (A)             (W)");
+   
+   /*Print headings in output file*/
+   fprintf(levels,"********************************************");
+   fprintf(levels,"\n	CIRCUIT AMPERAGE AND POWER");
+   fprintf(levels, "\n\nVoltage      Resistance        Current          Power");
+   fprintf(levels,"\n(V)            (ohms)           (A)             (W)");  
+   
+	/*Verify Input file exists or not and then read the control number if it exists*/
+   	if(circuits == NULL)
+   {
+   	printf("\n\n\nERROR OPENING INPUT FILE");
+   	printf("\n    PROGRAM TERMINATED");
+ 	return 1;
+   }
+   else
+	{
+   		/*Read the control number*/
+   		fscanf(circuits,"%i", &ndata);
+   		
+   		/*Read the input data and compute and print results*/
+   		
+   		for (int count=1; count<ndata; count++)
+   		{
+   			/*Input data from file*/
+   			fscanf(circuits,"%lf, %lf", &v_volt, &r_ohm);
+
+			/*Function call*/
+			i_amps = current(v_volt, r_ohm);
+			p_watt = power(i_amps, r_ohm);
+				if (i_amps>0.1)
+   			{
+   				printf("\n%03.0lf		%04.0lf	        **Current may be fatal.**", v_volt, r_ohm);
+   				fprintf(levels,"\n%03.0lf		%04.0lf               **Current may be fatal.**", v_volt, r_ohm);
+   				
+			   }
+			   else{
+				printf("\n%03.0lf		%04.0lf		%04.2lf		%04.2lf", v_volt, r_ohm, i_amps, p_watt);
+				fprintf(levels,"\n%03.0lf		%04.0lf		%04.2lf		%04.2lf", v_volt, r_ohm, i_amps, p_watt);
+			   }
+	
+		}
+	}
+	printf("\n********************************************\n\n\n");
+	fprintf(levels,"\n********************************************\n\n\n");
+   
+   /*Close the input and output files*/
+   fclose(circuits);
+   fclose(levels);
+   
+   /* Exit the program */
+   return 0;
+}
+
+/*This function calculates the current*/
+double current (double v, double r)
+{
+	return v/r;
+}
+
+/*This function calculates the power*/
+
+double power (double i, double r)
+{
+	return pow(i,2.0)*r;
+}
+
+
+
+
+/******************************************************************************/
