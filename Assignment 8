@@ -33,19 +33,19 @@ int main(void)
 	int ndata, i;
 	FILE *s_t, *s_s = NULL;
 	
+	/*Open input and output files*/
+	s_t = fopen(inputfile,"r");
+	s_s = fopen(outputfile,"w");
+	
    /* Print headings to screen*/
    printf("********************************************");
    printf("\nSTRESS AND STRAIN FOR 304 STAINLESS STEEL");
    printf("\n\nStrain     Stress      Region");
    
    /*Print headings to output*/
-   fprintf(s_s, "********************************************");
-   fprintf(s_s, "\nSTRESS AND STRAIN FOR 304 STAINLESS STEEL");
-   fprintf(s_s, "\n\nStrain     Stress      Region");
-
-	/*Open input and output files*/
-	s_t = fopen(inputfile,"r");
-	s_s = fopen(outputfile,"w");
+   fprintf(s_s,"********************************************");
+   fprintf(s_s,"\nSTRESS AND STRAIN FOR 304 STAINLESS STEEL");
+   fprintf(s_s,"\n\nStrain     Stress      Region");
    
 	/*Verify Input file exists or not and then read the control number if it exists*/
    if(s_t == NULL)
@@ -111,6 +111,7 @@ int main(void)
 	}
    
    printf("\n********************************************\n\n\n");
+   fprintf(s_s,"\n********************************************\n\n\n");
 
    /* Exit the program */
    return 0;
