@@ -1,0 +1,118 @@
+/*******************************************************************************
+AUTHOR SECTION
+
+   ENGR 200.01                                               DATE: 07/26/2023
+
+   PROGRAM: 8                               Author: Elizabeth Boone
+********************************************************************************
+   PROGRAM DESCRIPTION 
+Write a C program that will read the required values from the input file into two one-dimensional arrays: one array
+for the initial length and one array for the final length. Calculate the strain based on the length values, and use this
+strain to calculate the stress. Print the strain, the stress in ksi, and which regime the strain corresponds to, both to
+the screen and to an output data file called stress_strain
+
+*******************************************************************************/
+
+/* Preprocessor directives */
+#include <stdio.h>
+#include <math.h>
+#define Y 28000.0 /*Young’s Modulus*/
+#define E 0.001527 /*Elastic Limit - Strain*/
+#define S 30.0 /*Yield Stress*/
+#define K 184.923 /*K*/
+#define N 0.45 /*n*/
+#define inputfile ("C:\\Engr 200\\strain_tests.txt")
+#define outputfile ("C:\\Engr 200\\stress_strain.txt")
+
+/* Main function */
+int main(void)
+{
+   /* Declare variables and arrays*/
+	double strain, stress;
+	double final[12], initial[12];
+	int ndata, i;
+	FILE *s_t, *s_s = NULL;
+	
+   /* Print headings to screen*/
+   printf("********************************************");
+   printf("\nSTRESS AND STRAIN FOR 304 STAINLESS STEEL");
+   printf("\n\nStrain     Stress      Region");
+   
+   /*Print headings to output*/
+   fprintf(s_s, "********************************************");
+   fprintf(s_s, "\nSTRESS AND STRAIN FOR 304 STAINLESS STEEL");
+   fprintf(s_s, "\n\nStrain     Stress      Region");
+
+	/*Open input and output files*/
+	s_t = fopen(inputfile,"r");
+	s_s = fopen(outputfile,"w");
+   
+	/*Verify Input file exists or not and then read the control number if it exists*/
+   if(s_t == NULL)
+   {
+   	printf("\n\n\nERROR OPENING INPUT FILE");
+   	printf("\n    PROGRAM TERMINATED");
+ 	return 1;
+   }
+   	/*Read the control number*/
+   	fscanf(s_t, "%i", &ndata);
+   	
+   	/*Read data using arrays*/
+   	for(i=0; i<ndata; i++)
+   	{
+   		fscanf(s_t,"%lf,%lf", &final[i], &initial[i]);
+	   }
+	/*Close input file*/
+	fclose(s_t);
+	
+      
+   
+   /* Compute and print*/
+   /*Calculate strain given input values*/
+   for (i=0; i<ndata; i++)
+   {
+   		strain = (final[i] - initial[i])/initial[i];
+   		
+   		/*If statements to determine regime*/
+   		
+   		if(strain>0 && strain<= 0.001527)
+   		{
+   			/*Use Elastic Region*/
+   			stress = E * strain;
+   			printf("\n%07.5lf    %08.1lf    Elastic", strain, stress);
+   			fprintf(s_s, "\n%07.5lf    %08.1lf    Elastic", strain, stress);
+		   }
+		   else
+		   	{
+		   		if(strain>0.001527 && strain<= 0.002)
+		   		{
+		   			/*Use Yielding Region*/
+		   			printf("\n%07.5lf    %08.1lf    Yielding", strain, stress);
+		   			fprintf(s_s, "\n%07.5lf    %08.1lf    Yielding", strain, stress);
+				   }
+				   else
+				   {
+				   		if(strain>0.002 && strain<=0.5)
+				   		{
+				   			/*Use Strain Hardening Region*/
+				   			stress = K*pow((strain-E),N);
+				   			printf("\n%07.5lf    %08.1lf    Strain Hardening", strain, stress);
+				   			fprintf(s_s, "\n%07.5lf    %08.1lf    Strain Hardening", strain, stress);
+						   }
+						   else
+						   {
+						   		/*Use Necking Region*/
+						   		printf("\n%07.5lf    N/A         Necking", strain);
+						   		fprintf(s_s, "\n%07.5lf    N/A         Necking", strain);
+						   }
+				   }
+				   	
+		   	}
+	}
+   
+   printf("\n********************************************\n\n\n");
+
+   /* Exit the program */
+   return 0;
+}
+/******************************************************************************/
